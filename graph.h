@@ -14,6 +14,8 @@
 #include <string>
 using namespace std;
 
+const int MAXSIZE = 100;
+
 class Graph {
  public:
   Graph(); // default constructor
@@ -32,8 +34,14 @@ class Graph {
   // if there are multiple nodes with the same DFS run length, return the smallest node
   int bestStartVertex();
 
- private:
-  // member variables and helper functions (if needed)
+ private:  // member variables and helper functions (if needed)
+	int numNodes; //Number of nodes in the graph
+	int numEdges; //Number of edges in the graph
+	float current_budget; //Current budget available  
+	int adjacencyMatrix[MAXSIZE][MAXSIZE]; //Adjacency Matrix for max of 100 nodes
+	float nodes[MAXSIZE]; //Stores values associated with each node (node number will be index)
+	bool visited[MAXSIZE]; //Parallel array to determine if a node has been visited or not (node number will be index)
+			  
 };
 
 
