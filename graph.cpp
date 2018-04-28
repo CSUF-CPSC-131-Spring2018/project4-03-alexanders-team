@@ -15,37 +15,23 @@ using namespace std;
 
 // TO BE COMPLETED WITH IMPLEMENTATIONS OF GRAPH MEMBER FUNCTIONS
 Graph::Graph() {
-	for (int i = 0; i < MAXSIZE; i++) {
-		for (int j = 0; j < MAXSIZE; i++) {
-			adjacencyMatrix[i][j] = 0;
-		}
-	}
-	for (int i = 0; i < MAXSIZE; i++) {
-		visited[i] = false;
-	}
 	numNodes = 0;
 	numEdges = 0;
 	current_budget = 0;
 }
 Graph::Graph(int rno, float rbudget) {  // constructor with two arguments representing the number of nodes, initial budget
-	for (int i = 0; i < rno; i++) {
-		for (int j = 0; j < rno; i++) {
-			adjacencyMatrix[i][j] = 0;
-		}
-	}
-	for (int i = 0; i < rno; i++) {
-		visited[i] = false;
-	}
 	numNodes = rno;
 	numEdges = 0;
 	current_budget = rbudget;
 } 
 void Graph::addEdge(int node1, int node2) { // adds an edge between two nodes in the graph node1 and node2
-	adjacencyMatrix[node1][node2] = 1;
-	numEdges++;
+	if (adjacencyMatrix[node1][node2] != 1) { // If the edge does not already exist.....
+		adjacencyMatrix[node1][node2] = 1; //add the edge
+		numEdges++;
+	}
 } 
 void Graph::setValue(int node, float rval) {  // sets a value for a node
-	nodes[node] = rval;
+	nodeValue[node] = rval;
 }
 void Graph::setBudget(float rbu) { // sets the initial budget
 	current_budget = rbu;
@@ -60,7 +46,7 @@ float Graph::getBudget() { // return current budget
 	return current_budget;
 } 
 float Graph::getValue(int node) {  // returns the value of the node
-	return nodes[node];
+	return nodeValue[node];
 }
 void Graph::readData(string fileName) {
 	fstream fileReader(fileName);
@@ -81,18 +67,30 @@ void Graph::readData(string fileName) {
 		fileReader.close();
 	}
 } // reads data from a specified file
-int Graph::DFS(int startNode) {  // return the starting node that gives a longest DFS run before running out of budget if there are multiple nodes with the same DFS run length, return the smallest node
-	visited[startNode] = true; //Mark starting node as visited
-	for (int w = 0; w < numNodes; w++) {
-		if (adjacencyMatrix[startNode][w] == 1) {
-			if (!visited[w]) {
-				DFS(w);
+int Graph::DFS(int startNode) {  //return the number of nodes visited using DFS starting at startNode and accumulating values at each node, as long as the budget remains positive
+	int pathLength = 0; //stores the length of the path of every unvisited node adjacent to current node. Used to ensure that we attempt to visit every unvisited node before recursion unwinds.
+	if(current_budget >= 0){
+		visited[startNode] = true; //Mark starting node as visited
+		current_budget += nodeValue[startNode]; //Update budget with value of the current node
+		for (int w = 0; w < numNodes; w++) { //Cycle through adjacency list
+			if (adjacencyMatrix[startNode][w] == 1) { //If the nodes are adjacent....
+				if (!visited[w]) { // and the node has not yet been visited....
+					pathLength = DFS(w);	// update run length and move to that node.
+					}
+				}
 			}
-		}
 	}
+	return 1 + pathLength;
 }
 
-int Graph::bestStartVertex() {//return the number of nodes visited using BFS starting at startNode and accumulating values at each node, as long as the budget remains positive
-
-	current_budget += nodes[startNode];
+int Graph::bestStartVertex() { // return the starting node that gives a longest DFS run before running out of budget if there are multiple nodes with the same DFS run length, return the smallest node
+	int maxRunLength = 0;
+	int maxRunStartNode = 0;
+	for (int i = 0; i < numNodes; i++) {
+		if (DFS(i) > maxRunLength) {
+			maxRunLength = DFS(i);
+			maxRunStartNode = i;
+		}
+	}
+	return maxRunStartNode;
 }
