@@ -30,6 +30,8 @@ class Graph {
   void readData (string fileName); // reads data from a specified file
   int DFS(int startNode); //return the number of nodes visited using BFS starting at startNode and accumulating values at each node, as long as the budget remains positive
 
+
+
   // return the starting node that gives a longest DFS run before running out of budget
   // if there are multiple nodes with the same DFS run length, return the smallest node
   int bestStartVertex();
@@ -37,11 +39,10 @@ class Graph {
  private:  // member variables and helper functions (if needed)
 	int numNodes; //Number of nodes in the graph
 	int numEdges; //Number of edges in the graph
-	float current_budget; //Current budget available  
-	int adjacencyMatrix[MAXSIZE][MAXSIZE]; //Adjacency Matrix for max of 100 nodes
-	float nodes[MAXSIZE]; //Stores values associated with each node (node number will be index)
-	bool visited[MAXSIZE]; //Parallel array to determine if a node has been visited or not (node number will be index)
-			  
+	float current_budget;
+	int adjacencyMatrix[MAXSIZE][MAXSIZE] = { 0 }; //Adjacency Matrix for max of 100 nodes
+	float nodeValue[MAXSIZE] = { 0 }; //Stores values associated with each node (node number will be index)
+	bool visited[MAXSIZE] = { false }; //Parallel array to determine if a node has been visited or not
 };
 
 
