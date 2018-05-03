@@ -25,8 +25,9 @@ Graph::Graph(int rno, float rbudget) {  // constructor with two arguments repres
 	current_budget = rbudget;
 } 
 void Graph::addEdge(int node1, int node2) { // adds an edge between two nodes in the graph node1 and node2
-	if (adjacencyMatrix[node1][node2] != 1) { // If the edge does not already exist.....
+	if (adjacencyMatrix[node1][node2] == 0) { // If the edge does not already exist.....
 		adjacencyMatrix[node1][node2] = 1; //add the edge
+		adjacencyMatrix[node2][node1] = 1; //both ways for undirected graph
 		numEdges++;
 	}
 } 
@@ -63,32 +64,35 @@ void Graph::readData(string fileName) {
 			fileReader >> current;
 			fileReader >> adjacent;
 			addEdge(current, adjacent);
-	}
+		}
 		fileReader.close();
 	}
 } // reads data from a specified file
 int Graph::DFS(int startNode) {  //return the number of nodes visited using DFS starting at startNode and accumulating values at each node, as long as the budget remains positive
 	int pathLength = 0; //stores the length of the path of every unvisited node adjacent to current node. Used to ensure that we attempt to visit every unvisited node before recursion unwinds.
-	if(current_budget >= 0){
-		visited[startNode] = true; //Mark starting node as visited
-		current_budget += nodeValue[startNode]; //Update budget with value of the current node
-		for (int w = 0; w < numNodes; w++) { //Cycle through adjacency list
-			if (adjacencyMatrix[startNode][w] == 1) { //If the nodes are adjacent....
-				if (!visited[w]) { // and the node has not yet been visited....
-					pathLength = DFS(w);	// update run length and move to that node.
-					}
+	visited[startNode] = true; //Mark starting node as visited
+	current_budget += nodeValue[startNode]; //Update budget with value of the current node
+	for (int w = 0; w < numNodes; w++) { //Cycle through adjacency list
+		if (adjacencyMatrix[startNode][w] == 1) { //If the nodes are adjacent....
+			if (!visited[w]) { // and the node has not yet been visited....
+				if (current_budget > 0) { // if current budget is not negative..
+					pathLength += DFS(w);// explore that node and update run length.
 				}
 			}
+		}
 	}
 	return 1 + pathLength;
 }
+
+
 
 int Graph::bestStartVertex() { // return the starting node that gives a longest DFS run before running out of budget if there are multiple nodes with the same DFS run length, return the smallest node
 	int maxRunLength = 0;
 	int maxRunStartNode = 0;
 	for (int i = 0; i < numNodes; i++) {
-		if (DFS(i) > maxRunLength) {
-			maxRunLength = DFS(i);
+		int runLength = DFS(i);
+		if (runLength > maxRunLength) {
+			maxRunLength = runLength;
 			maxRunStartNode = i;
 		}
 	}
