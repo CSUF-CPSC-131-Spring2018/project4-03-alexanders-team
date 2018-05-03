@@ -68,6 +68,12 @@ void Graph::readData(string fileName) {
 		fileReader.close();
 	}
 } // reads data from a specified file
+void Graph::clear() {
+	current_budget = 100;
+	for (int i = 0; i < MAXSIZE; i++) {
+		visited[i] = false;
+	}
+}
 int Graph::DFS(int startNode) {  //return the number of nodes visited using DFS starting at startNode and accumulating values at each node, as long as the budget remains positive
 	int pathLength = 0; //stores the length of the path of every unvisited node adjacent to current node. Used to ensure that we attempt to visit every unvisited node before recursion unwinds.
 	visited[startNode] = true; //Mark starting node as visited
@@ -84,12 +90,11 @@ int Graph::DFS(int startNode) {  //return the number of nodes visited using DFS 
 	return 1 + pathLength;
 }
 
-
-
 int Graph::bestStartVertex() { // return the starting node that gives a longest DFS run before running out of budget if there are multiple nodes with the same DFS run length, return the smallest node
 	int maxRunLength = 0;
 	int maxRunStartNode = 0;
 	for (int i = 0; i < numNodes; i++) {
+		clear(); //clear board for a new DFS run
 		int runLength = DFS(i);
 		if (runLength > maxRunLength) {
 			maxRunLength = runLength;
