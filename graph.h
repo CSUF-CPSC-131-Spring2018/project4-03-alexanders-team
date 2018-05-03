@@ -43,6 +43,7 @@ class Graph {
 	int adjacencyMatrix[MAXSIZE][MAXSIZE] = { 0 }; //Adjacency Matrix for max of 100 nodes
 	float nodeValue[MAXSIZE] = { 0 }; //Stores values associated with each node (node number will be index)
 	bool visited[MAXSIZE] = { false }; //Parallel array to determine if a node has been visited or not
+	void clear(); //resets node visits and budgets for a fresh start for each traveral
 };
 
 
