@@ -1,7 +1,7 @@
-CSUF CPSC 131, Spring 2018
-Project 4
+CSUF CPSC 131, Fall 2018 Project 4
 
-Group members (replace with your own names and email addresses):
-Ada Lovelace adalovelace@csu.fullerton.edu
-Charles Babbage charlesbab@csu.fullerton.edu
+Alexander Feldman (Section 3) feldman0007@csu.fullerton.edu
 
+Matthew Quinlan (Section 3) quinlanswim@gmail.com
+
+Adam Gemperline (section 5) agemperline@csu.fullerton.edu
